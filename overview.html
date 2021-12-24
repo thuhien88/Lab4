@@ -1,0 +1,17 @@
+<HTML><BODY>
+
+<P>This is part of the code documentation for JFLAP 4.0.</P>
+
+<P>JFLAP allows a user to operate on various structures (like an automaton or grammar).  JFLAP's code is organized by various packages.  The code that creates and controls all user interface elements and other application logic is contained in the {@link gui} package.  The code for writing and reading files is contained in the {@link file} package.  The code for holding types of structures (like automata) and operating on those structures with various algorithms are contained within the {@link automata} (for automata), {@link grammar} (for grammars), {@link grammar.lsystem} (for L-systems), and {@link regular} (for regular expressions).</P>
+
+<P>A more detailed description of JFLAP's code organization follows here.</P>
+
+<P>JFLAP has the capability to have multiple structures open.  Each structure that is open in JFLAP corresponds to exactly one {@link gui.environment.EnvironmentFrame} and exactly one {@link gui.environment.Environment}.  JFLAP keeps track of <em>all</em> currently open structures (or, more precisely, their <code>Environments</code>) with the {@link gui.environment.Universe} class.</P>
+
+<P>Those that have used JFLAP already may know that every structure (whether it be an automata, grammar, L-system, or regular expression) is associated with a single window (specifically, an {@link gui.environment.EnvironmentFrame}).  The {@link gui.environment.Environment} associated with this window controls the various components that are open relating to this structure, as well as other information relevant to JFLAP about the structure, like to what file this structure is saved to, whether it has been edited and so forth.</P>
+
+<P>Each one of the components in the environment {@link gui.environment.Environment} is <em>presumably</em> relevant to the structure (though there's no way to enforce relevance, of course -- you could put in a <code>JLabel</code> that says "I like icecream" if you wanted).  Just to give an idea of what types of components live in the <code>Environment</code>, components could include perhaps as an editor to modify the structure (like {@link gui.editor.EditorPane} for automata or {@link gui.lsystem.LSystemInputPane} for L-systems, for example), or the interface for the conversion from an NFA to a DFA ({@link gui.deterministic.ConversionPane}), or anything.</P>
+
+<P>Components are <em>mostly</em> added to environments through choosing an action from the menu bar.  Exceptions include the editor, which is the only component in an environment at first and does not need to be added explicitly, and special components like {@link gui.grammar.parse.LRParsePane} which is added to the environment only after a parse table has been created via {@link gui.grammar.parse.LRParseTableDerivationPane}'s interface.</P>
+
+</BODY></HTML>

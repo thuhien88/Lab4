@@ -1,0 +1,38 @@
+Building JFLAP
+--------------
+Compiling and running JFLAP requires Java 1.4 and 1.5.  In order to
+build JFLAP and the JAR, a Makefile has been provided.  To build JFLAP
+with gnumake, enter
+
+	make
+
+from the command line.  This will create the compiled '.class' Java
+files, as well as the JFLAP.jar executable jar file.  The script used to
+create the JFLAP.jar executable requires Python 2.2.
+
+To run from the class files:
+
+	java JFLAP
+
+To run as a JAR:
+
+	java -jar JFLAP.jar
+
+Alternatively on OS X and on a correctly configured Windows machine, you
+can double click the JFLAP.jar file and it should just work.
+
+JFLAPplet
+---------
+The demo.html page shows a very simple example of embedding JFLAP as an
+applet, and requires that a JAR file for JFLAP be built as described
+above.
+
+Javadoc
+-------
+Entering
+
+	make doc
+
+will create Javadoc documentation for all the JFLAP code and packages in
+the javadoc directory.  The javadoc that comes with the 1.4 SDK is
+required.
