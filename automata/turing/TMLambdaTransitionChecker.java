@@ -24,42 +24,26 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
  
-package automata;
+package automata.turing;
 
-import automata.*;
-import automata.fsa.*;
-import gui.deterministic.NondeterminismDetector;
+import automata.LambdaTransitionChecker;
+import automata.Transition;
 
 /**
- * The Automaton checker can be used to determine certain properties
- * about automata.
+ * The tm lambda transition checker can be used to check if a one-tape
+ * Turing machine's transition is a lambda transition
  *
  * @author Ryan Cavalcante
  */
 
-public class AutomatonChecker {
+public class TMLambdaTransitionChecker extends LambdaTransitionChecker {
     /**
-     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     * Returns true if <CODE>transition</CODE> is a lambda transition
+     * @param transition the transition
+     * @return true if <CODE>transition</CODE> is a lambda transition
      */
-    public AutomatonChecker() {
-
-    }
-
-    /**
-     * Returns true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
-     * @param automaton the automaton.
-     * @return true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
-     */
-    public boolean isNFA(Automaton automaton) {
-	if(!(automaton instanceof FiniteStateAutomaton)) { 
-	    return false;
-	}
-	NondeterminismDetector nd = new FSANondeterminismDetector();
-	StateAutomaton[] nondeterministicStates = 
-	    nd.getNondeterministicStates(automaton);
-	return nondeterministicStates.length > 0;
+    public boolean isLambdaTransition(Transition transition) {
+	return false;
     }
 
 }

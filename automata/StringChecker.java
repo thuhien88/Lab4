@@ -26,40 +26,31 @@
  
 package automata;
 
-import automata.*;
-import automata.fsa.*;
-import gui.deterministic.NondeterminismDetector;
-
 /**
- * The Automaton checker can be used to determine certain properties
- * about automata.
- *
- * @author Ryan Cavalcante
+ * The StringChecker class is useful for determining whether a string
+ * has certain characteristics.
+ * 
+ * @author Thomas Finley
  */
 
-public class AutomatonChecker {
+public class StringChecker {
     /**
-     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     * We can't have people creating instances of us, now can we?
      */
-    public AutomatonChecker() {
-
-    }
+    private StringChecker() { }
 
     /**
-     * Returns true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
-     * @param automaton the automaton.
-     * @return true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
+     * Determines if all characters in a string are alphanumeric,
+     * i.e., are either digits or numbers.
+     * @param string the string to check
+     * @return <CODE>true</CODE> if all characters in the string are
+     * alphanumeric, <CODE>false</CODE> if at least one character in
+     * the string is non-alphanumeric
      */
-    public boolean isNFA(Automaton automaton) {
-	if(!(automaton instanceof FiniteStateAutomaton)) { 
-	    return false;
-	}
-	NondeterminismDetector nd = new FSANondeterminismDetector();
-	StateAutomaton[] nondeterministicStates = 
-	    nd.getNondeterministicStates(automaton);
-	return nondeterministicStates.length > 0;
+    public static boolean isAlphanumeric(String string) {
+	for (int i=0; i<string.length(); i++)
+	    if (!Character.isLetterOrDigit(string.charAt(i)))
+		return false;
+	return true;
     }
-
 }

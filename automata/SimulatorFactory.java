@@ -26,40 +26,28 @@
  
 package automata;
 
-import automata.*;
-import automata.fsa.*;
-import gui.deterministic.NondeterminismDetector;
-
 /**
- * The Automaton checker can be used to determine certain properties
- * about automata.
+ * This simulator factory returns the simulator for the type of
+ * automaton passed in.
  *
- * @author Ryan Cavalcante
+ * @author Thomas Finley
  */
 
-public class AutomatonChecker {
+public class SimulatorFactory {
     /**
-     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     * Returns the automaton simulator for this type of automaton.
+     * @param automaton the automaton to get the simulator for
+     * @return the appropriate automaton simulator for this automaton,
+     * or <CODE>null</CODE> if there is no automaton simulator known
+     * for this type of automaton
      */
-    public AutomatonChecker() {
-
+    public static AutomatonSimulator getSimulator(Automaton automaton) {
+	if (automaton instanceof automata.fsa.FiniteStateAutomaton)
+	    return new automata.fsa.FSAStepWithClosureSimulator(automaton);
+	else if (automaton instanceof automata.pda.PushdownAutomaton)
+	    return new automata.pda.PDAStepWithClosureSimulator(automaton);
+	else if (automaton instanceof automata.turing.TuringMachine)
+	    return new automata.turing.TMSimulator(automaton);
+	return null;
     }
-
-    /**
-     * Returns true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
-     * @param automaton the automaton.
-     * @return true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
-     */
-    public boolean isNFA(Automaton automaton) {
-	if(!(automaton instanceof FiniteStateAutomaton)) { 
-	    return false;
-	}
-	NondeterminismDetector nd = new FSANondeterminismDetector();
-	StateAutomaton[] nondeterministicStates = 
-	    nd.getNondeterministicStates(automaton);
-	return nondeterministicStates.length > 0;
-    }
-
 }

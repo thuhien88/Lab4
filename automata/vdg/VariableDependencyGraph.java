@@ -24,42 +24,34 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
  
-package automata;
+package automata.vdg;
 
-import automata.*;
-import automata.fsa.*;
-import gui.deterministic.NondeterminismDetector;
+import automata.Automaton;
 
 /**
- * The Automaton checker can be used to determine certain properties
- * about automata.
+ * This subclass of <CODE>Automaton</CODE> is specifically for a variable
+ * dependency graph used in the transformation of grammars (e.g. removing
+ * unit productions).
  *
  * @author Ryan Cavalcante
  */
 
-public class AutomatonChecker {
+public class VariableDependencyGraph extends Automaton {
     /**
-     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     * Creates a variable dependency graph with no states and no
+     * transitions.
      */
-    public AutomatonChecker() {
-
+    public VariableDependencyGraph() {
+	super();
     }
 
     /**
-     * Returns true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
-     * @param automaton the automaton.
-     * @return true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
+     * Returns the class of <CODE>Transition</CODE> this automaton
+     * must accept.
+     * @return the <CODE>Class</CODE> object for
+     * <CODE>automata.vdg.VDGTransition</CODE>
      */
-    public boolean isNFA(Automaton automaton) {
-	if(!(automaton instanceof FiniteStateAutomaton)) { 
-	    return false;
-	}
-	NondeterminismDetector nd = new FSANondeterminismDetector();
-	StateAutomaton[] nondeterministicStates = 
-	    nd.getNondeterministicStates(automaton);
-	return nondeterministicStates.length > 0;
+    protected Class getTransitionClass() {
+	return automata.vdg.VDGTransition.class;
     }
-
 }

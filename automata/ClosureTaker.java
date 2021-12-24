@@ -52,11 +52,11 @@ public class ClosureTaker {
      * @param automaton the automaton
      * @return the set of states that represent the closure of state.
      */
-    public static State[] getClosure(State state, Automaton automaton) {
+    public static StateAutomaton[] getClosure(StateAutomaton state, Automaton automaton) {
 	List list = new ArrayList();
 	list.add(state);
 	for (int i=0; i<list.size(); i++) {
-	    state = (State) list.get(i);
+	    state = (StateAutomaton) list.get(i);
 	    Transition transitions[] =
 		automaton.getTransitionsFromState(state);
 	    for(int k = 0; k < transitions.length; k++) {
@@ -65,14 +65,14 @@ public class ClosureTaker {
 		    LambdaCheckerFactory.getLambdaChecker(automaton);
 		/** if lambda transition */
 		if(checker.isLambdaTransition(transition)) {
-		    State toState = transition.getToState();
+		    StateAutomaton toState = transition.getToState();
 		    if(!list.contains(toState)) {
 			list.add(toState);
 		    }
 		}
 	    }
 	}
-	return (State[]) list.toArray(new State[0]);
+	return (StateAutomaton[]) list.toArray(new StateAutomaton[0]);
     }
 
 

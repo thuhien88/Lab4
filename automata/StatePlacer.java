@@ -26,40 +26,42 @@
  
 package automata;
 
-import automata.*;
-import automata.fsa.*;
-import gui.deterministic.NondeterminismDetector;
+import java.awt.Point;
 
 /**
- * The Automaton checker can be used to determine certain properties
- * about automata.
+ * The state placer object can be used to determine the location
+ * (on the canvas) to place a State.  Currently, the placement 
+ * algorithm is simply choosing random x and y coordinates in the 
+ * range of 0 to X_MAX and Y_MAX respectively.
  *
  * @author Ryan Cavalcante
  */
 
-public class AutomatonChecker {
+public class StatePlacer {
     /**
-     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     * Instantiates a <CODE>StatePlacer</CODE>.
      */
-    public AutomatonChecker() {
-
+    public StatePlacer() {
+	
     }
 
     /**
-     * Returns true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
+     * Returns a Point object that represents where to place
+     * the State on the canvas.
      * @param automaton the automaton.
-     * @return true if <CODE>automaton</CODE> is a non-deterministic
-     * finite state automaton.
+     * @return a Point object that represents where to place
+     * the State on the canvas.
      */
-    public boolean isNFA(Automaton automaton) {
-	if(!(automaton instanceof FiniteStateAutomaton)) { 
-	    return false;
-	}
-	NondeterminismDetector nd = new FSANondeterminismDetector();
-	StateAutomaton[] nondeterministicStates = 
-	    nd.getNondeterministicStates(automaton);
-	return nondeterministicStates.length > 0;
+    public Point getPointForState(Automaton automaton) {
+	double xcoord = Math.random() * X_MAX;
+	int x = (int) xcoord;
+	double ycoord = Math.random() * Y_MAX;
+	int y = (int) ycoord;
+	return new Point(x,y);
     }
 
+    /** The maximum value for the X-coordinate. */
+    protected final static int X_MAX = 600;
+    /** The maximum value for the Y-coordinate. */
+    protected final static int Y_MAX = 600;
 }

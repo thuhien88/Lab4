@@ -39,7 +39,7 @@ import java.util.*;
  * simply maintains a structure that holds and maintains the data
  * necessary to represent such a machine.
  * 
- * @see automata.State
+ * @see automata.StateAutomaton
  * @see automata.Transition
  * 
  * @author Thomas Finley
@@ -81,8 +81,8 @@ public class Automaton implements Serializable, Cloneable {
 	HashMap map = new HashMap(); // Old states to new states.
 	Iterator it = states.iterator();
 	while (it.hasNext()) {
-	    State state = (State) it.next();
-	    State nstate = new State(state.getID(),
+	    StateAutomaton state = (StateAutomaton) it.next();
+	    StateAutomaton nstate = new StateAutomaton(state.getID(),
 				     new Point(state.getPoint()), a);
 	    nstate.setLabel(state.getLabel());
 	    map.put(state, nstate);
@@ -91,19 +91,19 @@ public class Automaton implements Serializable, Cloneable {
 	// Set special states.
 	it = finalStates.iterator();
 	while (it.hasNext()) {
-	    State state = (State) it.next();
-	    a.addFinalState((State) map.get(state));
+	    StateAutomaton state = (StateAutomaton) it.next();
+	    a.addFinalState((StateAutomaton) map.get(state));
 	}
-	a.setInitialState((State) map.get(getInitialState()));
+	a.setInitialState((StateAutomaton) map.get(getInitialState()));
 
 	// Copy over the transitions.
 	it = states.iterator();
 	while (it.hasNext()) {
-	    State state = (State) it.next();
+	    StateAutomaton state = (StateAutomaton) it.next();
 	    Transition[] ts = getTransitionsFromState(state);
-	    State from = (State) map.get(state);
+	    StateAutomaton from = (StateAutomaton) map.get(state);
 	    for (int i=0; i<ts.length; i++) {
-		State to = (State) map.get(ts[i].getToState());
+		StateAutomaton to = (StateAutomaton) map.get(ts[i].getToState());
 		a.addTransition(ts[i].copy(from, to));
 	    }
 	}
@@ -119,7 +119,7 @@ public class Automaton implements Serializable, Cloneable {
      * @return an array of the <CODE>Transition</CODE> objects
      * emanating from this state
      */
-    public Transition[] getTransitionsFromState(State from) {
+    public Transition[] getTransitionsFromState(StateAutomaton from) {
 	Transition[] toReturn = 
 	    (Transition[]) transitionArrayFromStateMap.get(from); 
 	if (toReturn == null) {
@@ -137,7 +137,7 @@ public class Automaton implements Serializable, Cloneable {
      * @return an array of all <CODE>Transition</CODE> objects going
      * to the State
      */
-    public Transition[] getTransitionsToState(State to) {
+    public Transition[] getTransitionsToState(StateAutomaton to) {
 	Transition[] toReturn = 
 	    (Transition[]) transitionArrayToStateMap.get(to); 
 	if (toReturn == null) {
@@ -156,7 +156,7 @@ public class Automaton implements Serializable, Cloneable {
      * @return an array of all transitions coming from
      * <CODE>from</CODE> and going to <CODE>to</CODE>
      */
-    public Transition[] getTransitionsFromStateToState(State from, State to) {
+    public Transition[] getTransitionsFromStateToState(StateAutomaton from, StateAutomaton to) {
 	Transition[] t = getTransitionsFromState(from);
 	ArrayList list = new ArrayList();
 	for (int i=0; i<t.length; i++)    
@@ -259,10 +259,10 @@ public class Automaton implements Serializable, Cloneable {
      * state.  The ID for the state is set appropriately.
      * @param point the point to put the state at
      */
-    public final State createState(Point point) {
+    public final StateAutomaton createState(Point point) {
 	int i = 0;
 	while (getStateWithID(i) != null) i++;
-	State state = new State(i, point, this);
+	StateAutomaton state = new StateAutomaton(i, point, this);
 	addState(state);
 	return state;
     }
@@ -272,7 +272,7 @@ public class Automaton implements Serializable, Cloneable {
      * <CODE>createState</CODE> method instead.
      * @param state the state to add
      */
-    protected final void addState(State state) {
+    protected final void addState(StateAutomaton state) {
 	states.add(state);
 	transitionFromStateMap.put(state, new LinkedList());
 	transitionToStateMap.put(state, new LinkedList());
@@ -286,7 +286,7 @@ public class Automaton implements Serializable, Cloneable {
      * transitions associated with this state.
      * @param state the state to remove
      */
-    public void removeState(State state) {
+    public void removeState(StateAutomaton state) {
 	Transition[] t = getTransitionsFromState(state);
 	for (int i=0; i<t.length; i++)
 	    removeTransition(t[i]);
@@ -318,8 +318,8 @@ public class Automaton implements Serializable, Cloneable {
      * @return the old initial state, or <CODE>null</CODE> if there
      * was no initial state
      */
-    public State setInitialState(State initialState) {
-	State oldInitialState = this.initialState;
+    public StateAutomaton setInitialState(StateAutomaton initialState) {
+	StateAutomaton oldInitialState = this.initialState;
 	this.initialState = initialState;
 	return oldInitialState;
     }
@@ -328,7 +328,7 @@ public class Automaton implements Serializable, Cloneable {
      * Returns the start state for this automaton.
      * @return the start state for this automaton
      */
-    public State getInitialState() {
+    public StateAutomaton getInitialState() {
 	return this.initialState;
     }
 
@@ -337,12 +337,12 @@ public class Automaton implements Serializable, Cloneable {
      * The array is gauranteed to be in order of ascending state IDs.
      * @return an array containing all the states in this automaton
      */
-    public State[] getStates() {
+    public StateAutomaton[] getStates() {
 	if (cachedStates == null) {
-	    cachedStates = (State[]) states.toArray(new State[0]);
+	    cachedStates = (StateAutomaton[]) states.toArray(new StateAutomaton[0]);
 	    Arrays.sort(cachedStates, new Comparator() {
 		    public int compare(Object o1, Object o2) {
-			return ((State)o1).getID() - ((State)o2).getID();
+			return ((StateAutomaton)o1).getID() - ((StateAutomaton)o2).getID();
 		    }
 		    public boolean equals(Object o) {
 			return this==o;
@@ -359,7 +359,7 @@ public class Automaton implements Serializable, Cloneable {
      * @param finalState a new final state to add to the collection of
      * final states
      */
-    public void addFinalState(State finalState) {
+    public void addFinalState(StateAutomaton finalState) {
 	cachedFinalStates = null;
 	finalStates.add(finalState);
     }
@@ -370,7 +370,7 @@ public class Automaton implements Serializable, Cloneable {
      * nonfinal.
      * @param state the state to make not a final state
      */
-    public void removeFinalState(State state) {
+    public void removeFinalState(StateAutomaton state) {
 	cachedFinalStates = null;
 	finalStates.remove(state);
     }
@@ -381,9 +381,9 @@ public class Automaton implements Serializable, Cloneable {
      * to be in any particular order.
      * @return an array containing all final states of this automaton
      */
-    public State[] getFinalStates() {
+    public StateAutomaton[] getFinalStates() {
 	if (cachedFinalStates == null)
-	    cachedFinalStates = (State[]) finalStates.toArray(new State[0]);
+	    cachedFinalStates = (StateAutomaton[]) finalStates.toArray(new StateAutomaton[0]);
 	return cachedFinalStates;
     }
 
@@ -394,7 +394,7 @@ public class Automaton implements Serializable, Cloneable {
      * @return <CODE>true</CODE> if the state is a final state in
      * this automaton, <CODE>false</CODE> if it is not
      */
-    public boolean isFinalState(State state) {
+    public boolean isFinalState(StateAutomaton state) {
 	return finalStates.contains(state);
     }
 
@@ -404,10 +404,10 @@ public class Automaton implements Serializable, Cloneable {
      * @return the instance of <CODE>State</CODE> in this automaton
      * with this ID, or <CODE>null</CODE> if no such state exists
      */
-    public State getStateWithID(int id) {
+    public StateAutomaton getStateWithID(int id) {
 	Iterator it = states.iterator();
 	while (it.hasNext()) {
-	    State state = (State) it.next();
+	    StateAutomaton state = (StateAutomaton) it.next();
 	    if (state.getID() == id) return state;
 	}
 	return null;
@@ -420,7 +420,7 @@ public class Automaton implements Serializable, Cloneable {
      * @return <CODE>true</CODE> if this state is in the automaton,
      * <CODE>false</CODE>otherwise
      */
-    public boolean isState(State state) {
+    public boolean isState(StateAutomaton state) {
 	return states.contains(state);
     }
 
@@ -446,7 +446,7 @@ public class Automaton implements Serializable, Cloneable {
 	StringBuffer buffer = new StringBuffer();
 	buffer.append(super.toString());
 	buffer.append('\n');
-	State[] states = getStates();
+	StateAutomaton[] states = getStates();
 	for (int s=0; s<states.length; s++) {
 	    if (initialState == states[s]) buffer.append("--> ");
 	    buffer.append(states[s]);
@@ -549,8 +549,8 @@ public class Automaton implements Serializable, Cloneable {
 	    // The reading for version 0 of this object.
 	    Set s = (Set) in.readObject();
 	    Iterator it = s.iterator();
-	    while (it.hasNext()) addState((State) it.next());
-	    initialState = (State) in.readObject();
+	    while (it.hasNext()) addState((StateAutomaton) it.next());
+	    initialState = (StateAutomaton) in.readObject();
 	    finalStates = (Set) in.readObject();
 	    // Let the class take care of the transition stuff.
 	    Set trans = (Set) in.readObject();
@@ -591,17 +591,17 @@ public class Automaton implements Serializable, Cloneable {
     /** The collection of states in this automaton. */
     private Set states;
     /** The cached array of states. */
-    private State[] cachedStates = null;
+    private StateAutomaton[] cachedStates = null;
     /** The cached array of transitions. */
     private Transition[] cachedTransitions = null;
     /** The cached array of final states. */
-    private State[] cachedFinalStates = null;
+    private StateAutomaton[] cachedFinalStates = null;
 
     /** The collection of final states in this automaton.  This is a
      * subset of the "states" collection. */
     private Set finalStates;
     /** The initial state. */
-    private State initialState = null;
+    private StateAutomaton initialState = null;
 
     /** The list of transitions in this automaton. */
     private Set transitions;
