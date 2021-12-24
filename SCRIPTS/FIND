@@ -1,0 +1,15 @@
+#!/usr/bin/perl
+
+# This is a small script for finding those .java files that don't have a 
+# corresponding .class file.  This particular script will simply print 
+# out the names of those files.  The idea is those .java files are useless 
+# to a final ultimate compilation.
+
+@lines = split(/\n/, `find . -name "*.java"`);
+foreach $line (@lines) {
+	$class = $line;
+	$class =~ s/^(.*)\.java$/\1\.class/;
+	if (!-e $class) {
+		print "$line\n";
+	}
+}
