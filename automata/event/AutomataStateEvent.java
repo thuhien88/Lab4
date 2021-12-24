@@ -28,14 +28,14 @@ package automata.event;
 
 import java.util.EventObject;
 import automata.Automaton;
-import automata.State;
+import automata.StateAutomaton;
 
 /**
  * This event is given to listeners of an automaton interested in
  * events when a state on an automaton is added or removed, or moved,
  * or it's label was changed, etc.
  * @see automata.Automaton
- * @see automata.State
+ * @see automata.StateAutomaton
  * @see automata.Automaton#addState
  * @see automata.Automaton#removeState
  * @see automata.event.AutomataStateListener
@@ -53,7 +53,7 @@ public class AutomataStateEvent extends EventObject {
      * @param label <CODE>true</CODE> if the state was only changed in
      * such a fashion as
      */
-    public AutomataStateEvent(Automaton auto, State state, boolean add,
+    public AutomataStateEvent(Automaton auto, StateAutomaton state, boolean add,
 			      boolean move, boolean label) {
 	super(auto);
 	myState = state;
@@ -74,7 +74,7 @@ public class AutomataStateEvent extends EventObject {
      * Returns the <CODE>State</CODE> that was added/removed.
      * @return the <CODE>State</CODE> that was added/removed
      */
-    public State getState() {
+    public StateAutomaton getState() {
 	return myState;
     }
 
@@ -121,5 +121,5 @@ public class AutomataStateEvent extends EventObject {
     /** Was the label for the state changed? */
     public boolean myLabel;
     /** Which state did we add/remove? */
-    private State myState;
+    private StateAutomaton myState;
 }
