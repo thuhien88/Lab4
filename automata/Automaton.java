@@ -618,7 +618,7 @@ public class Automaton implements Serializable, Cloneable {
      * a state.  This is a sort of cashing. */
     private HashMap transitionArrayToStateMap = new HashMap();
 
-    // LISTENER STUFF
+    // LISTENER STUFF 
     // Structures related to this object as something that generates
     // events, in particular as it pertains to the removal and
     // addition of states and transtions.
